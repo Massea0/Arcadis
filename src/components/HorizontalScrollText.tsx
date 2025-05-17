@@ -13,12 +13,16 @@ const HorizontalScrollText: React.FC = () => {
         if (!containerRef.current || !textRef.current) return;
 
         const container = containerRef.current;
-        const textItems = textRef.current;
-        const textWidth = textItems.scrollWidth;
+        const textItems = textRef.current.children;
+        let textWidth = 0;
+
+        for (let i = 0; i < textItems.length; i++) {
+            textWidth += (textItems[i] as HTMLElement).offsetWidth;
+        }
         const windowWidth = window.innerWidth;
         const scrollDistance = textWidth - windowWidth;
 
-        gsap.to(textItems, {
+        gsap.to(textRef.current, {
             x: -scrollDistance,
             ease: "none",
             scrollTrigger: {
@@ -26,7 +30,8 @@ const HorizontalScrollText: React.FC = () => {
                 start: "top top",
                 end: () => `+=${scrollDistance + windowWidth}`,
                 pin: true,
-                scrub: 0.5, // Reduced scrub for smoother effect
+                scrub: 0.5,
+                anticipatePin: 1,
                 invalidateOnRefresh: true,
             },
         });

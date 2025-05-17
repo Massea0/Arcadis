@@ -1,4 +1,3 @@
-// src/components/Footer.tsx
 import React from 'react';
 import '../styles/Footer.css';
 
@@ -64,10 +63,10 @@ const Footer: React.FC = () => {
                             <span>Téléphone:</span>
                             <a href="tel:+221771980224">+221 77 198 02 24</a>
                         </p>
-                        <p className="footer-contact-item">
+                        <div className="footer-contact-item">
                             <span>Adresse:</span>
                             <address>1210 Rue GYxxx, Dakar</address>
-                        </p>
+                        </div>
                     </div>
                 </div>
             </div>
