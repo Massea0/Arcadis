@@ -4,7 +4,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark; /* ou light en fonction de votre thème par défaut */
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #051620; /* Couleur de fond principale */
 
@@ -16,26 +16,32 @@
 
 a {
   font-weight: 500;
-  color: #a0d8ef; /* Couleur d'accentuation pour les liens */
+  color: #a0d8ef;
   text-decoration: inherit;
 }
 a:hover {
-  color: #c4e5f3; /* Couleur des liens au survol */
+  color: #c4e5f3;
+}
+
+/* Assurez-vous que html et body permettent le défilement géré par Lenis */
+html {
+  /* scroll-behavior: smooth; */ /* Lenis s'en charge, donc auto est préférable si ReactLenis ne le fait pas */
 }
 
 body {
   margin: 0;
-  padding: 0; /* Ajouté pour s'assurer qu'il n'y a pas de padding par défaut */
+  padding: 0;
   width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden; /* Empêche le défilement horizontal */
-  background-color: #051620; /* Assurez-vous que c'est la même que :root ou ce que vous voulez */
-  position: relative; /* Utile pour certains types de positionnement enfant */
+  min-height: 100vh; /* Permet au corps de s'étendre au moins à la hauteur de la vue */
+  overflow-x: hidden; /* Empêche le défilement horizontal accidentel */
+  /* NE PAS METTRE overflow-y: hidden; ici, Lenis doit pouvoir contrôler le défilement vertical */
+  background-color: #051620; /* Cohérence avec :root */
+  position: relative;
 }
 
 
 h1, h2, h3, h4, h5, h6, p, span, div {
-  color: inherit; /* Hérite la couleur du parent */
+  color: inherit;
 }
 
 h1 {
@@ -50,35 +56,34 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a; /* Couleur de fond par défaut des boutons */
-  color: rgba(255, 255, 255, 0.87); /* Couleur du texte des boutons */
+  background-color: #1a1a1a;
+  color: rgba(255, 255, 255, 0.87);
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #a0d8ef; /* Couleur de la bordure au survol */
+  border-color: #a0d8ef;
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color; /* Style de focus */
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* Lenis specific styles */
+/* Styles spécifiques à Lenis - généralement ajoutés par la bibliothèque,
+   mais vous pouvez les avoir si vous avez suivi certains guides.
+   Si ReactLenis gère cela, ils pourraient ne pas être nécessaires ici. */
 html.lenis {
-  height: auto; /* Important pour Lenis */
+  height: auto;
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto !important; /* Lenis gère le défilement smooth */
+  scroll-behavior: auto !important; /* Lenis gère le défilement fluide */
 }
 
 .lenis.lenis-stopped {
   overflow: hidden !important; /* Empêche le défilement lorsque Lenis est arrêté */
 }
 
-.lenis.lenis-scrolling iframe { /* Optionnel: pour éviter les problèmes avec les iframes pendant le scroll */
+.lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
-
-/* Vous pouvez retirer `html { scroll-behavior: smooth; }` s'il est présent,
-   car Lenis s'en charge et .lenis.lenis-smooth le remplace par auto. */
