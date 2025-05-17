@@ -1,85 +1,80 @@
 // src/components/Hero.tsx
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import '../styles/Hero.css'; // Importation du CSS spécifique au Hero
+                    import React, { useEffect, useRef } from 'react';
+                    import gsap from 'gsap';
+                    import ScrollTrigger from 'gsap/ScrollTrigger';
+                    import '../styles/Hero.css';
 
-gsap.registerPlugin(ScrollTrigger);
+                    gsap.registerPlugin(ScrollTrigger);
 
-interface ScrollTriggerInstanceWithKill extends gsap.core.ScrollTrigger {
-    kill: (soft?: boolean, preserveStyles?: boolean) => void;
-}
+                    // Define ScrollTrigger instance interface
+                    interface ScrollTriggerInstance {
+                        kill: () => void;
+                    }
 
-const Hero: React.FC = () => {
-    const heroRef = useRef<HTMLDivElement>(null);
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const subtitleRef = useRef<HTMLParagraphElement>(null);
-    const scrollDownRef = useRef<HTMLDivElement>(null);
+                    const Hero: React.FC = () => {
+                        const heroRef = useRef<HTMLDivElement>(null);
+                        const textRef = useRef<HTMLHeadingElement>(null);
+                        const subTextRef = useRef<HTMLParagraphElement>(null);
 
-    useEffect(() => {
-        if (heroRef.current && titleRef.current && subtitleRef.current && scrollDownRef.current) {
-            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+                        useEffect(() => {
+                            if (heroRef.current && textRef.current && subTextRef.current) {
+                                const tl = gsap.timeline();
 
-            tl.fromTo(
-                titleRef.current,
-                { opacity: 0, y: 70 },
-                { opacity: 1, y: 0, duration: 1 }
-            )
-                .fromTo(
-                    subtitleRef.current,
-                    { opacity: 0, y: 50 },
-                    { opacity: 1, y: 0, duration: 0.8 },
-                    "-=0.7"
-                )
-                .fromTo(
-                    scrollDownRef.current,
-                    { opacity: 0, y: 20 },
-                    { opacity: 0.7, y: 0, duration: 0.6 },
-                    "-=0.5"
-                );
+                                // Initial animation on page load
+                                tl.fromTo(
+                                    textRef.current,
+                                    { opacity: 0, y: 100 },
+                                    {
+                                        opacity: 1,
+                                        y: 0,
+                                        duration: 1.2,
+                                        ease: "power3.out"
+                                    }
+                                ).fromTo(
+                                    subTextRef.current,
+                                    { opacity: 0, y: 50 },
+                                    {
+                                        opacity: 1,
+                                        y: 0,
+                                        duration: 1,
+                                        ease: "power3.out"
+                                    },
+                                    "-=0.8"
+                                );
 
-            gsap.to([titleRef.current, subtitleRef.current, scrollDownRef.current], {
-                yPercent: -50,
-                opacity: 0,
-                ease: "power2.in",
-                scrollTrigger: {
-                    trigger: heroRef.current,
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: true,
-                },
-            });
-        }
+                                // Scroll effect
+                                gsap.to([textRef.current, subTextRef.current], {
+                                    y: -100,
+                                    opacity: 0,
+                                    ease: "power2.in",
+                                    scrollTrigger: {
+                                        trigger: heroRef.current,
+                                        start: "top top",
+                                        end: "bottom top",
+                                        scrub: true,
+                                    },
+                                });
+                            }
 
-        return () => {
-            ScrollTrigger.getAll().forEach((trigger) => {
-                const typedTrigger = trigger as ScrollTriggerInstanceWithKill;
-                if (typedTrigger.trigger === heroRef.current ||
-                    typedTrigger.trigger === titleRef.current ||
-                    typedTrigger.trigger === subtitleRef.current ||
-                    typedTrigger.trigger === scrollDownRef.current) {
-                    typedTrigger.kill(true);
-                }
-            });
-        };
-    }, []);
+                            return () => {
+                                ScrollTrigger.getAll().forEach((trigger: ScrollTriggerInstance) => trigger.kill());
+                            };
+                        }, []);
 
-    return (
-        // La classe "hero" est stylée dans Hero.css
-        <div ref={heroRef} className="hero">
-            {/* Ces classes doivent correspondre à celles définies dans Hero.css */}
-            <h1 ref={titleRef} className="hero-title">
-                Arcadis Tech
-            </h1>
-            <p ref={subtitleRef} className="hero-subtitle">
-                Accélérez votre transformation digitale avec des solutions innovantes.
-            </p>
-            <div ref={scrollDownRef} className="scroll-down">
-                <span>Scroll</span>
-                <div className="arrow"></div>
-            </div>
-        </div>
-    );
-};
+                        return (
+                            <div ref={heroRef} className="hero">
+                                <h1 ref={textRef} className="hero-title">
+                                    Arcadis Tech
+                                </h1>
+                                <p ref={subTextRef} className="hero-subtitle">
+                                    Accélérez votre transformation digitale avec des solutions innovantes.
+                                </p>
+                                <div className="scroll-down">
+                                    <span>Scroll</span>
+                                    <div className="arrow"></div>
+                                </div>
+                            </div>
+                        );
+                    };
 
-export default Hero;
+                    export default Hero;

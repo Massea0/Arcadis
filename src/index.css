@@ -1,4 +1,3 @@
-/* src/index.css */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -6,7 +5,7 @@
 
   color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #051620; /* Couleur de fond principale */
+  background-color: #051620;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,22 +22,14 @@ a:hover {
   color: #c4e5f3;
 }
 
-/* Assurez-vous que html et body permettent le défilement géré par Lenis */
-html {
-  /* scroll-behavior: smooth; */ /* Lenis s'en charge, donc auto est préférable si ReactLenis ne le fait pas */
-}
-
 body {
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100vh; /* Permet au corps de s'étendre au moins à la hauteur de la vue */
-  overflow-x: hidden; /* Empêche le défilement horizontal accidentel */
-  /* NE PAS METTRE overflow-y: hidden; ici, Lenis doit pouvoir contrôler le défilement vertical */
-  background-color: #051620; /* Cohérence avec :root */
-  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #051620;
 }
-
 
 h1, h2, h3, h4, h5, h6, p, span, div {
   color: inherit;
@@ -57,7 +48,6 @@ button {
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
-  color: rgba(255, 255, 255, 0.87);
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -69,19 +59,25 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* Styles spécifiques à Lenis - généralement ajoutés par la bibliothèque,
-   mais vous pouvez les avoir si vous avez suivi certains guides.
-   Si ReactLenis gère cela, ils pourraient ne pas être nécessaires ici. */
+/* Fix for smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
 html.lenis {
   height: auto;
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto !important; /* Lenis gère le défilement fluide */
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
 .lenis.lenis-stopped {
-  overflow: hidden !important; /* Empêche le défilement lorsque Lenis est arrêté */
+  overflow: hidden;
 }
 
 .lenis.lenis-scrolling iframe {
