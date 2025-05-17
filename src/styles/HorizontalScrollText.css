@@ -1,0 +1,140 @@
+/* src/styles/HorizontalScrollText.css */
+.horizontal-scroll-container {
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: #051620;
+}
+
+.horizontal-scroll-text {
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0 10vw;
+    will-change: transform;
+}
+
+.scroll-text-item {
+    min-width: 80vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10vw;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.scroll-text-heading {
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, #ffffff, #a0d8ef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    z-index: 2;
+    transform-origin: left center;
+    line-height: 1.1;
+}
+
+.scroll-text-paragraph {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.decorative-line {
+    height: 2px;
+    background: linear-gradient(90deg, rgba(160, 216, 239, 0.8), rgba(160, 216, 239, 0));
+    position: absolute;
+    bottom: 40%;
+    left: 10vw;
+    border-radius: 2px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, #0A3845, #1a5769);
+    color: white;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    max-width: fit-content;
+}
+
+.cta-button:hover {
+    background: linear-gradient(45deg, #1a5769, #0A3845);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Particles styling */
+.particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(160, 216, 239, 0.8) 0%, rgba(160, 216, 239, 0) 70%);
+    border-radius: 50%;
+    opacity: 0.3;
+}
+
+/* Active state styling */
+.scroll-text-heading.active,
+.scroll-text-paragraph.active {
+    text-shadow: 0 0 20px rgba(160, 216, 239, 0.3);
+}
+
+/* Extra visual effects */
+.scroll-text-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    width: 25vw;
+    height: 25vw;
+    background: radial-gradient(circle, rgba(10, 56, 69, 0.6) 0%, rgba(10, 56, 69, 0) 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .scroll-text-item {
+        padding: 0 5vw;
+        min-width: 90vw;
+    }
+
+    .scroll-text-heading {
+        font-size: clamp(2rem, 8vw, 4rem);
+    }
+
+    .decorative-line {
+        bottom: 35%;
+    }
+}

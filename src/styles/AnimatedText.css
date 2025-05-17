@@ -1,0 +1,15 @@
+/* src/styles/AnimatedText.css */
+.animated-text {
+    display: inline-block;
+    overflow: hidden;
+}
+
+.animated-text span {
+    display: inline-block;
+    transform-origin: center;
+    will-change: transform, opacity;
+}
+
+.animated-text .space {
+    width: 0.3em;
+}

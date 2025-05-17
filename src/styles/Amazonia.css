@@ -1,0 +1,9 @@
+.amazonia-canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none; /* pour que la 3D ne bloque pas les clics */
+}

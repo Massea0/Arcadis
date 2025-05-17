@@ -1,0 +1,140 @@
+/* src/styles/NotFound.css */
+.not-found-container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #051620;
+    color: white;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.error-particle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(10, 56, 69, 0.8) 0%, rgba(10, 56, 69, 0) 70%);
+    border-radius: 50%;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.not-found-content {
+    text-align: center;
+    max-width: 600px;
+    z-index: 2;
+    position: relative;
+}
+
+.error-number {
+    font-size: clamp(8rem, 20vw, 15rem);
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(45deg, #ffffff, #a0d8ef);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    transform: scale(0.8);
+    letter-spacing: -0.05em;
+    line-height: 1;
+}
+
+.error-number.animate {
+    animation: errorNumberAnimation 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
+}
+
+@keyframes errorNumberAnimation {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.error-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 1rem 0 2rem;
+    color: white;
+}
+
+.error-message {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.back-home-button {
+    background: linear-gradient(45deg, #0A3845, #1a5769);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.back-home-button:hover {
+    background: linear-gradient(45deg, #1a5769, #0A3845);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Add a glitch effect to the 404 */
+.error-number::before,
+.error-number::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(45deg, #ffffff, #a0d8ef);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.error-number::before {
+    animation: glitch 3s infinite alternate-reverse;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-0.025em, -0.0125em);
+    opacity: 0.8;
+}
+
+.error-number::after {
+    animation: glitch 2s infinite alternate-reverse;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    transform: translate(0.025em, 0.0125em);
+    opacity: 0.8;
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-3px, 3px);
+    }
+    40% {
+        transform: translate(-3px, -3px);
+    }
+    60% {
+        transform: translate(3px, 3px);
+    }
+    80% {
+        transform: translate(3px, -3px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}

@@ -1,0 +1,54 @@
+/* src/styles/SiteTransition.css */
+
+  /* Page transition container */
+  .page-transition-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Overlay used for page transitions */
+  .transition-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-medium);
+    transform: translateY(100%);
+  }
+
+  /* Animation states for entering and exiting */
+  .transition-enter {
+    opacity: 0;
+  }
+
+  .transition-enter-active {
+    opacity: 1;
+    transition: opacity 300ms ease;
+  }
+
+  .transition-exit {
+    opacity: 1;
+  }
+
+  .transition-exit-active {
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  /* Loading indicator during transitions */
+  .transition-loader {
+    color: var(--accent);
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 10000;
+    opacity: 0;
+  }
