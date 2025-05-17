@@ -1,11 +1,12 @@
+/* src/index.css */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark;
+  color-scheme: dark; /* ou light en fonction de votre thème par défaut */
   color: rgba(255, 255, 255, 0.87);
-  background-color: #051620;
+  background-color: #051620; /* Couleur de fond principale */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,24 +16,26 @@
 
 a {
   font-weight: 500;
-  color: #a0d8ef;
+  color: #a0d8ef; /* Couleur d'accentuation pour les liens */
   text-decoration: inherit;
 }
 a:hover {
-  color: #c4e5f3;
+  color: #c4e5f3; /* Couleur des liens au survol */
 }
 
 body {
   margin: 0;
-  padding: 0;
+  padding: 0; /* Ajouté pour s'assurer qu'il n'y a pas de padding par défaut */
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
-  background-color: #051620;
+  overflow-x: hidden; /* Empêche le défilement horizontal */
+  background-color: #051620; /* Assurez-vous que c'est la même que :root ou ce que vous voulez */
+  position: relative; /* Utile pour certains types de positionnement enfant */
 }
 
+
 h1, h2, h3, h4, h5, h6, p, span, div {
-  color: inherit;
+  color: inherit; /* Hérite la couleur du parent */
 }
 
 h1 {
@@ -47,39 +50,35 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #1a1a1a; /* Couleur de fond par défaut des boutons */
+  color: rgba(255, 255, 255, 0.87); /* Couleur du texte des boutons */
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #a0d8ef;
+  border-color: #a0d8ef; /* Couleur de la bordure au survol */
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto -webkit-focus-ring-color; /* Style de focus */
 }
 
-/* Fix for smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
+/* Lenis specific styles */
 html.lenis {
-  height: auto;
+  height: auto; /* Important pour Lenis */
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
+  scroll-behavior: auto !important; /* Lenis gère le défilement smooth */
 }
 
 .lenis.lenis-stopped {
-  overflow: hidden;
+  overflow: hidden !important; /* Empêche le défilement lorsque Lenis est arrêté */
 }
 
-.lenis.lenis-scrolling iframe {
+.lenis.lenis-scrolling iframe { /* Optionnel: pour éviter les problèmes avec les iframes pendant le scroll */
   pointer-events: none;
 }
+
+/* Vous pouvez retirer `html { scroll-behavior: smooth; }` s'il est présent,
+   car Lenis s'en charge et .lenis.lenis-smooth le remplace par auto. */

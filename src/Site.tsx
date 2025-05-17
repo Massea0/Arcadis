@@ -1,8 +1,8 @@
 // src/Site.tsx
-import { ReactLenis } from '@studio-freight/react-lenis';
+import { ReactLenis, useLenis } from '@studio-freight/react-lenis';
 import Amazonia from './components/Amazonia.js';
 import SyncLenisAndGSAP from './components/SyncLenisAndGSAP.js';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 interface SiteProps {
     children: ReactNode;
@@ -10,11 +10,13 @@ interface SiteProps {
 
 export default function Site({ children }: SiteProps) {
     return (
-        <ReactLenis root options={{ duration: 1.2, smooth: true }}>
-            <div style={{ position: 'relative', zIndex: 0 }}>
+        <ReactLenis root options={{ lerp: 0.1, duration: 1.2, smoothWheel: true }}>
+            {/* SyncLenisAndGSAP sera rendu comme un enfant de ReactLenis
+                et pourra accéder à Lenis via useLenis() à l'intérieur. */}
+            <SyncLenisAndGSAP />
+            <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}>
                 {/* Canvas WebGL en arrière-plan */}
                 <Amazonia />
-                <SyncLenisAndGSAP />
             </div>
 
             <main style={{ position: 'relative', zIndex: 1 }}>

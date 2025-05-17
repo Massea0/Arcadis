@@ -1,17 +1,97 @@
-/* src/components/Hero.css */
+/* src/styles/Hero.css */
 .hero {
     height: 100vh;
     width: 100%;
     display: flex;
+    flex-direction: column; /* Pour empiler titre, sous-titre, et scroll-down */
     justify-content: center;
     align-items: center;
-    background: transparent;
-    position: relative;
-    overflow: hidden;
-    z-index: 2;
+    text-align: center; /* Pour centrer le texte dans les éléments enfants */
+    background: transparent; /* Laisse voir l'arrière-plan global (Amazonia) */
+    position: relative; /* Pour le positionnement de .scroll-down */
+    overflow: hidden; /* Pour éviter tout débordement inattendu */
+    z-index: 2; /* Pour s'assurer qu'il est au-dessus de l'arrière-plan mais potentiellement sous la navbar */
+    padding: 0 2rem; /* Ajoute un peu d'espace sur les côtés */
 }
 
-.hero-text {
+.hero-title {
+    font-size: clamp(3rem, 10vw, 5.5rem); /* Légèrement ajusté pour une meilleure lisibilité */
+    font-weight: 800;
+    letter-spacing: -0.04em; /* Ajusté pour l'esthétique */
+    margin-bottom: 1rem; /* Espace sous le titre */
+    background: linear-gradient(45deg, #ffffff, #a0d8ef);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 25px rgba(160, 216, 239, 0.25); /* Ombre portée plus subtile */
+    color: white; /* Fallback pour les navigateurs ne supportant pas background-clip */
+    will-change: transform, opacity; /* Pour les animations GSAP */
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem); /* Légèrement ajusté */
+    font-weight: 400;
+    line-height: 1.6;
+    opacity: 0.85; /* Légèrement plus visible */
+    color: white;
+    max-width: 700px; /* Limite la largeur pour une meilleure lisibilité */
+    margin-top: 0.5rem; /* Espace au-dessus du sous-titre */
+    margin-bottom: 3rem; /* Espace avant l'indicateur de défilement */
+    will-change: transform, opacity; /* Pour les animations GSAP */
+}
+
+.scroll-down {
+    position: absolute;
+    bottom: 40px; /* Un peu plus haut */
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 0.75rem; /* Plus petit */
+    text-transform: uppercase;
+    letter-spacing: 1.5px; /* Plus espacé */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.scroll-down:hover {
+    opacity: 1;
+}
+
+.scroll-down span {
+    margin-bottom: 8px;
+}
+
+.scroll-down .arrow {
+    width: 7px; /* Plus petit */
+    height: 7px; /* Plus petit */
+    border-left: 1.5px solid white; /* Plus fin */
+    border-bottom: 1.5px solid white; /* Plus fin */
+    transform: rotate(-45deg);
+    animation: bounce 2.5s infinite ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) rotate(-45deg);
+        opacity: 0.8;
+    }
+    40% {
+        transform: translateY(-12px) rotate(-45deg); /* Rebond plus prononcé */
+        opacity: 1;
+    }
+    60% {
+        transform: translateY(-6px) rotate(-45deg);
+        opacity: 0.9;
+    }
+}
+
+/* Si .hero-text existe encore quelque part et n'est plus utilisé, vous pouvez le supprimer.
+   Sinon, s'il est utilisé par d'autres composants, laissez-le ou adaptez-le. */
+.hero-text { /* Conservez ceci uniquement s'il est utilisé ailleurs */
     font-size: 3rem;
     font-weight: bold;
     text-align: center;

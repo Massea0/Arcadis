@@ -2,13 +2,28 @@
 .home-container {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden; /* Empêche le défilement horizontal accidentel */
     color: white;
 }
 
-/* Hero Section */
-.hero-section {
-    height: 100vh;
+/* Commentez ou supprimez ces règles pour éviter les conflits avec Lenis */
+/*
+html, body {
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+    height: 100%;
+}
+
+section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+*/
+
+/* Hero Section - Ces styles seront principalement gérés par Hero.css */
+.hero-section { /* Peut être conservé si Hero est une section spécifique dans Home.tsx */
+    /* min-height: 100vh; */ /* Utilisez min-height si vous voulez que la section prenne au moins toute la hauteur */
+    height: 100vh; /* Si vous voulez qu'elle prenne exactement toute la hauteur */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -16,49 +31,27 @@
     justify-content: center;
     position: relative;
     padding: 0 2rem;
-    z-index: 2;
+    z-index: 2; /* Assurez-vous qu'il est au-dessus de l'arrière-plan Amazonia */
 }
 
-.hero-content {
+.hero-content { /* S'il y a un conteneur .hero-content dans Hero.tsx */
     text-align: center;
-    z-index: 10;
+    z-index: 10; /* Au-dessus des autres éléments du héros si nécessaire */
     max-width: 800px;
 }
 
-.hero-text {
-    color: white;
-    margin: 0;
-    will-change: transform, opacity;
-}
+/* Les styles .hero-text, .hero-text:first-child, .hero-text:last-child
+   seront déplacés et adaptés dans src/styles/Hero.css comme .hero-title et .hero-subtitle */
 
-.hero-text:first-child {
-    font-size: clamp(3rem, 10vw, 6rem);
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    margin-bottom: 1rem;
-    background: linear-gradient(45deg, #ffffff, #a0d8ef);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 2px 30px rgba(160, 216, 239, 0.3);
-}
 
-.hero-text:last-child {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-    font-weight: 400;
-    line-height: 1.5;
-    opacity: 0.9;
-    color: white;
-}
-
-/* Section Content */
+/* Section Content - Styles généraux pour les sections dans Home.tsx */
 .section-content {
     padding: 5rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
-    z-index: 2;
-    min-height: 100vh;
+    z-index: 2; /* Au-dessus de l'arrière-plan Amazonia */
+    min-height: 100vh; /* Pour que chaque section prenne au moins la hauteur de la fenêtre */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -77,7 +70,7 @@
 }
 
 /* Services Grid with Enhanced Animations */
-.services-section {
+.services-section { /* Si c'est une classe pour une section spécifique dans Home.tsx */
     padding: 5rem 2rem;
     position: relative;
     min-height: 100vh;
@@ -92,7 +85,7 @@
     gap: 2rem;
     margin-top: 3rem;
     will-change: transform, opacity;
-    transition: all 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    /* transition: all 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67); */ /* Peut être géré par GSAP */
 }
 
 .service-card {
@@ -108,14 +101,14 @@
     overflow: hidden;
     position: relative;
     cursor: pointer;
-    height: 280px;
+    height: 280px; /* Hauteur fixe initiale */
     transform-origin: center;
 }
 
 .service-card.expanded {
     cursor: default;
     z-index: 10;
-    height: 400px;
+    height: 400px; /* Hauteur lorsque la carte est agrandie */
     transform: scale(1.05);
 }
 
@@ -158,7 +151,7 @@
 }
 
 .service-card.expanded .service-details {
-    height: auto;
+    height: auto; /* Permet au contenu de définir la hauteur */
     opacity: 1;
     transform: translateY(0);
     margin-top: 1.5rem;
@@ -185,21 +178,6 @@
     opacity: 1;
 }
 
-/* Fix for the Snap Scrolling */
-html, body {
-    scroll-behavior: smooth;
-    scroll-snap-type: y proximity;
-    height: 100%;
-}
-
-section {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-}
-
-.parallax-section {
-    scroll-snap-align: start;
-}
 
 /* Animation for timeline reveal */
 @keyframes fadeSlideUp {
@@ -239,7 +217,11 @@ section {
     }
 
     .service-card {
-        height: auto;
-        min-height: 200px;
+        height: auto; /* Hauteur auto sur mobile pour s'adapter au contenu */
+        min-height: 200px; /* Hauteur minimale */
+    }
+
+    .service-card.expanded {
+        height: auto; /* Hauteur auto sur mobile pour s'adapter au contenu */
     }
 }
