@@ -16,7 +16,6 @@ const HorizontalScrollText: React.FC = () => {
         const textItems = textRef.current;
         const textWidth = textItems.scrollWidth;
         const windowWidth = window.innerWidth;
-
         const scrollDistance = textWidth - windowWidth;
 
         gsap.to(textItems, {
@@ -27,10 +26,8 @@ const HorizontalScrollText: React.FC = () => {
                 start: "top top",
                 end: () => `+=${scrollDistance + windowWidth}`,
                 pin: true,
-                scrub: 1,
-                anticipatePin: 1,
+                scrub: 0.5, // Reduced scrub for smoother effect
                 invalidateOnRefresh: true,
-                // Removed snap for smoother scrolling
             },
         });
 
