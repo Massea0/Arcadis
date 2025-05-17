@@ -1,106 +1,83 @@
-import React, { useState, useEffect, useRef } from 'react';
-                            import { Routes, Route, useLocation } from 'react-router-dom';
-                            import Navbar from './components/Navbar.js';
-                            import Footer from './components/Footer.js';
-                            import Home from './pages/Home.js';
-                            import About from './pages/About.js';
-                            import Services from './pages/Services.js';
-                            import Contact from './pages/Contact.js';
-                            import NotFound from './pages/NotFound.js';
-                            import LoadingScreen from './components/LoadingScreen.js';
-                            import SiteTransitionProvider from './context/SiteTransitionProvider.js';
-                            import { gsap } from 'gsap';
-                            import { ScrollTrigger } from 'gsap/ScrollTrigger';
-                            import './styles/App.css';
+// src/App.tsx
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom'; // Gardé pour la navigation par ancre (#)
+import Navbar from './components/Navbar.js';
+import Footer from './components/Footer.js';
+import Home from './pages/Home.js';
+// Les autres imports de pages (About, Services, Contact, NotFound) ne sont pas utilisés
+// si Home.tsx gère tout le contenu de la page unique.
+// Ils pourraient être utilisés pour une future version multi-pages avec React Router.
+import LoadingScreen from './components/LoadingScreen.js';
+import SiteTransitionProvider from './context/SiteTransitionProvider.js';
+// GSAP et ScrollTrigger sont importés dans les composants qui les utilisent directement.
+import './styles/App.css';
+import Site from './Site.js'; // Importez le composant Site
 
-                            gsap.registerPlugin(ScrollTrigger);
+// gsap.registerPlugin(ScrollTrigger); // Plus nécessaire ici si non utilisé directement
 
-                            const App: React.FC = () => {
-                                const [loading, setLoading] = useState(true);
-                                const [scrolled, setScrolled] = useState(false);
-                                const location = useLocation();
-                                const firstSectionRef = useRef<HTMLDivElement>(null);
+const App: React.FC = () => {
+    const [loading, setLoading] = useState(true);
+    const [scrolled, setScrolled] = useState(false);
+    const location = useLocation(); // Pour la navigation par ancre
 
-                                // Handle initial app loading
-                                useEffect(() => {
-                                    const handleLoading = () => {
-                                        setLoading(false);
-                                    };
+    // Gère l'écran de chargement initial
+    useEffect(() => {
+        const handleLoading = () => setLoading(false);
+        // Simule un temps de chargement
+        const timer = setTimeout(handleLoading, 2500);
+        return () => clearTimeout(timer); // Nettoyage du timer
+    }, []);
 
-                                    setTimeout(handleLoading, 2500); // Minimum display time for loading screen
-                                }, []);
+    // Gère l'état "scrolled" pour la Navbar
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll(); // Vérification initiale au chargement
+        return () => window.removeEventListener('scroll', handleScroll); // Nettoyage de l'écouteur
+    }, []);
 
-                                // Handle scroll events for Navbar
-                                useEffect(() => {
-                                    const handleScroll = () => {
-                                        const isScrolled = window.scrollY > 50;
-                                        if (isScrolled !== scrolled) {
-                                            setScrolled(isScrolled);
-                                        }
-                                    };
+    // Gère la navigation par ancre (#) après le chargement
+    useEffect(() => {
+        if (!loading && location.hash) {
+            const element = document.getElementById(location.hash.substring(1));
+            if (element) {
+                // Utilise scrollIntoView pour un défilement plus fiable vers les sections
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [loading, location.hash]); // Se déclenche si loading ou location.hash change
 
-                                    window.addEventListener('scroll', handleScroll);
+    return (
+        <>
+            {loading ? (
+                <LoadingScreen onLoadComplete={() => setLoading(false)} />
+            ) : (
+                // Le composant Site enveloppe tout pour fournir Lenis (défilement fluide)
+                // et l'arrière-plan Amazonia (étoiles).
+                <Site>
+                    <SiteTransitionProvider>
+                        <Navbar scrolled={scrolled} />
+                        {/* Si Home.tsx est la page unique principale, on la rend directement.
+                            La structure avec <main className="snap-container"> et les <section>
+                            a été retirée d'ici, car Home.tsx gère ses propres sections. */}
+                        <Home />
+                        {/* Si vous aviez une application multi-pages, ce serait ici :
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/services" element={<Services />} />
+                            <Route path="/contact" element={<Contact />} />
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+                        */}
+                        <Footer />
+                    </SiteTransitionProvider>
+                </Site>
+            )}
+        </>
+    );
+};
 
-                                    // Initial check
-                                    handleScroll();
-
-                                    return () => {
-                                        window.removeEventListener('scroll', handleScroll);
-                                    };
-                                }, [scrolled]);
-
-                                // GSAP effect for disappearing first section
-                                useEffect(() => {
-                                    if (firstSectionRef.current) {
-                                        gsap.to(firstSectionRef.current, {
-                                            opacity: 0,
-                                            y: -100,
-                                            scrollTrigger: {
-                                                trigger: firstSectionRef.current,
-                                                start: 'top top',
-                                                end: 'bottom top',
-                                                scrub: true,
-                                            },
-                                        });
-                                    }
-                                }, []);
-
-                                // Handle hash-based navigation
-                                useEffect(() => {
-                                    if (location.hash) {
-                                        const element = document.querySelector(location.hash);
-                                        if (element) {
-                                            element.scrollIntoView({ behavior: 'smooth' });
-                                        }
-                                    }
-                                }, [location]);
-
-                                return (
-                                    <>
-                                        {loading ? (
-                                            <LoadingScreen onLoadComplete={() => setLoading(false)} />
-                                        ) : (
-                                            <SiteTransitionProvider>
-                                                <Navbar scrolled={scrolled} />
-                                                <main className="snap-container">
-                                                    <section ref={firstSectionRef} className="snap-section" id="home">
-                                                        <Home />
-                                                    </section>
-                                                    <section className="snap-section" id="about">
-                                                        <About />
-                                                    </section>
-                                                    <section className="snap-section" id="services">
-                                                        <Services />
-                                                    </section>
-                                                    <section className="snap-section" id="contact">
-                                                        <Contact />
-                                                    </section>
-                                                </main>
-                                                <Footer />
-                                            </SiteTransitionProvider>
-                                        )}
-                                    </>
-                                );
-                            };
-
-                            export default App;
+export default App;

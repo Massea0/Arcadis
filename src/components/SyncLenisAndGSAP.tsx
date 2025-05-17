@@ -1,125 +1,102 @@
-// src/components/SyncLenisAndGSAP.tsx
-            import { useEffect } from "react";
-            import Lenis from "@studio-freight/lenis";
-            import { gsap } from "gsap";
-            import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect } from "react";
+import Lenis from "@studio-freight/lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-            gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
-            // Define a proper interface for Lenis options matching the library's structure
-            interface LenisOptions {
-                wrapper?: HTMLElement | Window;
-                content?: HTMLElement;
-                wheelEventsTarget?: HTMLElement | Window | null;
-                smoothWheel?: boolean;
-                smoothTouch?: boolean;
-                touchMultiplier?: number;
-                wheelMultiplier?: number;
-                duration?: number;
-                easing?: (t: number) => number;
-                lerp?: number;
-                infinite?: boolean;
-                gestureOrientation?: 'vertical' | 'horizontal' | 'both';
-                orientation?: 'vertical' | 'horizontal';
-                smooth?: boolean;
+interface LenisOptions {
+    wrapper?: HTMLElement | Window;
+    content?: HTMLElement;
+    wheelEventsTarget?: HTMLElement | Window | null;
+    smoothWheel?: boolean;
+    smoothTouch?: boolean;
+    touchMultiplier?: number;
+    wheelMultiplier?: number;
+    duration?: number;
+    easing?: (t: number) => number;
+    lerp?: number;
+    infinite?: boolean;
+    gestureOrientation?: 'vertical' | 'horizontal' | 'both';
+    orientation?: 'vertical' | 'horizontal';
+    smooth?: boolean;
+}
+
+interface ScrollToOptions {
+    offset?: number;
+    immediate?: boolean;
+    duration?: number;
+    easing?: (t: number) => number;
+}
+
+interface ScrollTriggerInstance {
+    progress: number;
+    direction: number;
+    isActive: boolean;
+    animation?: gsap.core.Animation;
+    trigger: Element;
+    start: string;
+    end: string;
+    kill: () => void;
+}
+
+const SyncLenisAndGSAP = () => {
+    useEffect(() => {
+        document.body.style.backgroundColor = "#0A3845";
+
+        const lenis = new Lenis({
+            duration: 1.2,
+            smooth: true,
+            wheelMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2
+        } as LenisOptions);
+
+        const onScroll = () => { // Removed the 'time' parameter
+            lenis.raf();
+        };
+
+        const lenisScrollTrigger = ScrollTrigger.create({
+            trigger: document.body,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+            onUpdate: (self: ScrollTriggerInstance) => {
+                lenis.scrollTo(self.progress * document.body.scrollHeight, {
+                    duration: 0.1
+                } as ScrollToOptions);
             }
+        });
 
-            // Define a proper interface for scrollTo options
-            interface ScrollToOptions {
-                offset?: number;
-                immediate?: boolean;
-                duration?: number;
-                easing?: (t: number) => number;
-            }
+        ScrollTrigger.refresh();
 
-            // Define proper type for ScrollTrigger instance
-            interface ScrollTriggerInstance {
-                progress: number;
-                direction: number;
-                isActive: boolean;
-                animation?: gsap.core.Animation;
-                trigger: Element;
-                start: string;
-                end: string;
-                kill: () => void;
-            }
+        let scrollSpeed = 0;
+        let lastScrollTop = 0;
 
-            const SyncLenisAndGSAP = () => {
-                useEffect(() => {
-                    // Set the dark turquoise blue background color
-                    document.body.style.backgroundColor = "#0A3845";
+        const handleScroll = () => {
+            const st = window.scrollY;
+            scrollSpeed = Math.abs(st - lastScrollTop);
+            lastScrollTop = st;
 
-                    // Update the canvas background in Amazonia component to match the theme
-                    const canvasElement = document.querySelector(".amazonia-canvas-container canvas");
-                    if (canvasElement) {
-                        (canvasElement as HTMLElement).style.background =
-                            "linear-gradient(to bottom, #051620, #0A3845)";
-                    }
+            window.dispatchEvent(new CustomEvent('scrollSpeedChange', {
+                detail: { speed: scrollSpeed }
+            }));
+        };
 
-                    // Create Lenis instance with the properly typed options
-                    const lenis = new Lenis({
-                        duration: 1.2,
-                        smooth: true,
-                        wheelMultiplier: 1,
-                        smoothTouch: false,
-                        touchMultiplier: 2
-                    } as LenisOptions);
+        window.addEventListener('scroll', handleScroll);
 
-                    // Function to handle scroll animation
-                    const onScroll = (time: number) => {
-                        lenis.raf(time);
-                    };
+        const requestId = requestAnimationFrame(onScroll);
 
-                    // Sync Lenis with GSAP's ScrollTrigger
-                    const lenisScrollTrigger = ScrollTrigger.create({
-                        trigger: document.body,
-                        start: "top top",
-                        end: "bottom bottom",
-                        scrub: true,
-                        onUpdate: (self: ScrollTriggerInstance) => {
-                            lenis.scrollTo(self.progress * document.body.scrollHeight, {
-                                duration: 0.1
-                            } as ScrollToOptions);
-                        }
-                    });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            lenisScrollTrigger.kill();
+            lenis.destroy();
+            cancelAnimationFrame(requestId);
+            document.body.style.backgroundColor = "";
+        };
+    }, []);
 
-                    // Create connection between Lenis and ScrollTrigger
-                    ScrollTrigger.refresh();
+    return null;
+};
 
-                    // Create a variable to monitor scroll speed for star movement
-                    let scrollSpeed = 0;
-                    let lastScrollTop = 0;
-
-                    // Add listener to track scroll speed for star field movement
-                    const handleScroll = () => {
-                        const st = window.scrollY;
-                        scrollSpeed = Math.abs(st - lastScrollTop);
-                        lastScrollTop = st;
-
-                        // Emit custom event that StarsParallax can listen to
-                        window.dispatchEvent(new CustomEvent('scrollSpeedChange', {
-                            detail: { speed: scrollSpeed }
-                        }));
-                    };
-
-                    window.addEventListener('scroll', handleScroll);
-
-                    // Animation frame loop
-                    const requestId = requestAnimationFrame(onScroll);
-
-                    return () => {
-                        // Clean up when component unmounts
-                        window.removeEventListener('scroll', handleScroll);
-                        lenisScrollTrigger.kill();
-                        lenis.destroy();
-                        cancelAnimationFrame(requestId);
-
-                        // Reset background color if needed when component unmounts
-                        document.body.style.backgroundColor = "";
-                    };
-                }, []);
-
-                return null;
-            };
-
-            export default SyncLenisAndGSAP;
+export default SyncLenisAndGSAP;
